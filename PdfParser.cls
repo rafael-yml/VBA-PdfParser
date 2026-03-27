@@ -32,7 +32,7 @@ Public Function ExtractText( _
     sText = m_txt.ExtractText(filePath)
     m_lStatus = m_txt.LastStatus
     
-    If m_lStatus = PDFTXT_OK Then
+    If m_lStatus = m_txt.PDFTXT_OK Then
         m_sTier = "PdfTXT"
         ExtractText = sText
         Exit Function
@@ -80,7 +80,7 @@ Public Function ExtractPages( _
     sText = m_txt.ExtractText(filePath)
     m_lStatus = m_txt.LastStatus
     
-    If m_lStatus = PDFTXT_OK Then
+    If m_lStatus = m_txt.PDFTXT_OK Then
         m_sTier = "PdfTXT"
         oPages.Add sText
         Set ExtractPages = oPages
