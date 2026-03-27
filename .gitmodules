@@ -1,0 +1,12 @@
+[submodule "helpers/PdfTXT"]
+	path = helpers/PdfTXT
+	url = https://github.com/rafael-yml/VBA-PdfTXT.git
+[submodule "helpers/PdfWRT"]
+	path = helpers/PdfWRT
+	url = https://github.com/rafael-yml/VBA-PdfWRT.git
+[submodule "helpers/WinOCR"]
+	path = helpers/WinOCR
+	url = https://github.com/rafael-yml/VBA-WinOCR.git
+[submodule "helpers/WdCOM"]
+	path = helpers/WdCOM
+	url = https://github.com/rafael-yml/VBA-WdCOM.git
