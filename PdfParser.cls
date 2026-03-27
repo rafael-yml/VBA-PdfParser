@@ -120,6 +120,7 @@ Private Function TryRenderAndOCR(ByVal filePath As String) As Collection
     Dim foundText As Boolean
     
     For i = LBound(widths) To UBound(widths)
+        foundText = False
         Set oRenderedPages = m_wrt.RenderPDFToBytes(filePath, widths(i))
         
         If oRenderedPages.Count > 0 Then
