@@ -16,12 +16,6 @@ Private m_wrd As WdCOM
 Private m_sTier As String
 Private m_lStatus As Long
 
-Private Sub Class_Initialize()
-    Set m_txt = New PdfTXT
-    Set m_wrt = New PdfWRT
-    Set m_ocr = New WinOCR
-    Set m_wrd = New WdCOM
-End Sub
 ' ---------------------------------------------------------------------------
 ' Status codes
 ' ---------------------------------------------------------------------------
@@ -53,6 +47,13 @@ Public Property Get WRT() As PdfWRT: Set WRT = m_wrt: End Property
 Public Property Get OCR() As WinOCR: Set OCR = m_ocr: End Property
 Public Property Get WRD() As WdCOM:  Set WRD = m_wrd: End Property
 
+Private Sub Class_Initialize()
+    Set m_txt = New PdfTXT
+    Set m_wrt = New PdfWRT
+    Set m_ocr = New WinOCR
+    Set m_wrd = New WdCOM
+End Sub
+
 Public Function ExtractText( _
     ByVal filePath As String, _
     Optional ByVal useWord As Boolean = False) As String
@@ -64,7 +65,7 @@ Public Function ExtractText( _
     sText = m_txt.ExtractText(filePath)
     m_lStatus = m_txt.LastStatus
     
-    If m_lStatus = m_txt.PDFTXT_OK Then
+    If m_lStatus = PDFTXT_OK Then
         m_sTier = "PdfTXT"
         ExtractText = sText
         Exit Function
@@ -106,7 +107,7 @@ Public Function ExtractPages( _
     sText = m_txt.ExtractText(filePath)
     m_lStatus = m_txt.LastStatus
     
-    If m_lStatus = m_txt.PDFTXT_OK Then
+    If m_lStatus = PDFTXT_OK Then
         m_sTier = "PdfTXT"
         oPages.Add sText
         Set ExtractPages = oPages
