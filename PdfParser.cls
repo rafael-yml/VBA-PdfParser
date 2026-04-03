@@ -1,4 +1,14 @@
-' PdfParser.cls
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "PdfParser"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+
 Private m_txt As PdfTXT
 Private m_wrt As PdfWRT
 Private m_ocr As WinOCR
@@ -12,6 +22,28 @@ Private Sub Class_Initialize()
     Set m_ocr = New WinOCR
     Set m_wrd = New WdCOM
 End Sub
+' ---------------------------------------------------------------------------
+' Status codes
+' ---------------------------------------------------------------------------
+Private Const PDFTXT_OK      As Long = 0  ' clean text returned
+Private Const PDFTXT_NO_TEXT As Long = 1  ' no text operators found (image-only or blank PDF)
+Private Const PDFTXT_NO_CMAP As Long = 2  ' hex-encoded glyphs found but no ToUnicode CMap
+Private Const PDFTXT_GARBLED As Long = 3  ' CMap present but unmapped-glyph ratio too high
+Private Const PDFTXT_FAIL    As Long = 4  ' file missing, not a PDF, encrypted, or parse error
+
+Private Const WDCOM_OK           As Long = 0
+Private Const WDCOM_FILE_MISSING As Long = 1
+Private Const WDCOM_ENCRYPTED    As Long = 2
+Private Const WDCOM_WORD_FAILED  As Long = 3
+Private Const WDCOM_OPEN_FAILED  As Long = 4
+Private Const WDCOM_EMPTY        As Long = 5
+Private Const WDCOM_GARBLED      As Long = 6
+
+Private Const WINOCR_OK        As Long = 0  ' text recognised successfully
+Private Const WINOCR_NO_ENGINE As Long = 1  ' language not installed / engine unavailable
+Private Const WINOCR_TOO_LARGE As Long = 2  ' image exceeds OcrEngine.MaxImageDimension
+Private Const WINOCR_EMPTY     As Long = 3  ' OCR completed but returned no text
+Private Const WINOCR_FAIL      As Long = 4  ' file missing, decode error, or init failure
 
 Public Property Get LastTier() As String:   LastTier = m_sTier:   End Property
 Public Property Get LastStatus() As Long:   LastStatus = m_lStatus: End Property
