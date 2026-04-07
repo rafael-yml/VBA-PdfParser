@@ -24,10 +24,10 @@ PdfParser orchestrates them in a tiered pipeline so you get text with minimal bo
 Import these 5 files into your VBA project:
 
 1. `PdfParser.cls` – main wrapper
-2. `helpers/PdfTXT/PdfTXT.cls`
-3. `helpers/PdfWRT/PdfWRT.cls`
-4. `helpers/WinOCR/WinOCR.cls`
-5. `helpers/WdCOM/WdCOM.cls`
+2. `PdfTXT/PdfTXT.cls`
+3. `PdfWRT/PdfWRT.cls`
+4. `WinOCR/WinOCR.cls`
+5. `WdCOM/WdCOM.cls`
 
 No references to set, no external dependencies. Requires Windows 10+ for WinRT PDF rendering.
 
@@ -108,7 +108,7 @@ If all tiers fail, an empty string is returned.
 | [VBA-WinOCR](https://github.com/rafael-yml/VBA-WinOCR) | Image → text via Windows OCR |
 | [VBA-WdCOM](https://github.com/rafael-yml/VBA-WdCOM) | Word COM automation fallback |
 
-All helpers are included as git submodules in the `helpers/` directory.
+All helpers are included as git submodules in the root directory.
 
 ---
 
