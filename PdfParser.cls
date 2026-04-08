@@ -66,9 +66,13 @@ Public Function ExtractText( _
     m_lStatus = m_txt.LastStatus
     
     If m_lStatus = PDFTXT_OK Then
-        m_sTier = "PdfTXT"
-        ExtractText = sText
-        Exit Function
+        If IsGarbledText(sText) Then
+            m_lStatus = PDFTXT_GARBLED
+        Else
+            m_sTier = "PdfTXT"
+            ExtractText = sText
+            Exit Function
+        End If
     End If
     
     Dim oPages As Collection
@@ -108,10 +112,14 @@ Public Function ExtractPages( _
     m_lStatus = m_txt.LastStatus
     
     If m_lStatus = PDFTXT_OK Then
-        m_sTier = "PdfTXT"
-        oPages.Add sText
-        Set ExtractPages = oPages
-        Exit Function
+        If IsGarbledText(sText) Then
+            m_lStatus = PDFTXT_GARBLED
+        Else
+            m_sTier = "PdfTXT"
+            oPages.Add sText
+            Set ExtractPages = oPages
+            Exit Function
+        End If
     End If
     
     Dim oRenderedPages As Collection
@@ -183,4 +191,26 @@ Private Function JoinCollection(ByVal oCol As Collection, ByVal delimiter As Str
         End If
         JoinCollection = JoinCollection & CStr(v)
     Next
+End Function
+
+Private Function IsGarbledText(ByVal text As String) As Boolean
+    IsGarbledText = False
+    
+    Dim tokens() As String
+    tokens = Split(text, " ")
+    
+    If UBound(tokens) < 10 Then Exit Function
+    
+    Dim singleCharCount As Long
+    Dim i As Long
+    
+    For i = 0 To UBound(tokens)
+        If Len(tokens(i)) = 1 Then
+            singleCharCount = singleCharCount + 1
+        End If
+    Next
+    
+    If singleCharCount / (UBound(tokens) + 1) > 0.5 Then
+        IsGarbledText = True
+    End If
 End Function
