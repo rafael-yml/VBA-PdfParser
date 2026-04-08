@@ -196,21 +196,43 @@ End Function
 Private Function IsGarbledText(ByVal text As String) As Boolean
     IsGarbledText = False
     
+    Dim cleaned As String
+    cleaned = Replace(text, Chr(160), " ")
+    cleaned = Replace(cleaned, vbTab, " ")
+    Do While InStr(cleaned, "  ") > 0
+        cleaned = Replace(cleaned, "  ", " ")
+    Loop
+    
     Dim tokens() As String
-    tokens = Split(text, " ")
+    tokens = Split(cleaned, " ")
     
     If UBound(tokens) < 10 Then Exit Function
     
     Dim singleCharCount As Long
+    Dim specialCharCount As Long
     Dim i As Long
+    Dim token As String
+    Dim j As Long
+    Dim ch As String
     
     For i = 0 To UBound(tokens)
-        If Len(tokens(i)) = 1 Then
+        token = tokens(i)
+        If Len(token) = 1 Then
             singleCharCount = singleCharCount + 1
+        ElseIf Len(token) > 0 Then
+            For j = 1 To Len(token)
+                ch = Mid(token, j, 1)
+                If Not ((ch >= "A" And ch <= "Z") Or (ch >= "a" And ch <= "z") Or (ch >= "0" And ch <= "9")) Then
+                    specialCharCount = specialCharCount + 1
+                End If
+            Next
         End If
     Next
     
-    If singleCharCount / (UBound(tokens) + 1) > 0.5 Then
+    Dim totalTokens As Long
+    totalTokens = UBound(tokens) + 1
+    
+    If singleCharCount / totalTokens > 0.3 Or specialCharCount / totalTokens > 0.3 Then
         IsGarbledText = True
     End If
 End Function
