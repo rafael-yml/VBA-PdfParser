@@ -198,6 +198,8 @@ Private Function IsGarbledText(ByVal text As String) As Boolean
     
     Dim cleaned As String
     cleaned = Replace(text, Chr(160), " ")
+	cleaned = Replace(cleaned, vbCrLf, " ")
+	cleaned = Replace(cleaned, vbLf, " ")
     cleaned = Replace(cleaned, vbTab, " ")
     Do While InStr(cleaned, "  ") > 0
         cleaned = Replace(cleaned, "  ", " ")
