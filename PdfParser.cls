@@ -214,18 +214,22 @@ Private Function IsGarbledText(ByVal text As String) As Boolean
     Dim token As String
     Dim j As Long
     Dim ch As String
+    Dim hasSpecial As Boolean
     
     For i = 0 To UBound(tokens)
         token = tokens(i)
         If Len(token) = 1 Then
             singleCharCount = singleCharCount + 1
         ElseIf Len(token) > 0 Then
+            hasSpecial = False
             For j = 1 To Len(token)
                 ch = Mid(token, j, 1)
-                If Not ((ch >= "A" And ch <= "Z") Or (ch >= "a" And ch <= "z") Or (ch >= "0" And ch <= "9")) Then
-                    specialCharCount = specialCharCount + 1
+                If Not ((ch >= "A" And ch <= "Z") Or (ch >= "a" And ch <= "z") Or (ch >= "0" And ch <= "9") Or ch = "," Or ch = "." Or ch = "-") Then
+                    hasSpecial = True
+                    Exit For
                 End If
             Next
+            If hasSpecial Then specialCharCount = specialCharCount + 1
         End If
     Next
     
