@@ -222,6 +222,7 @@ Private Function IsGarbledText(ByVal text As String) As Boolean
     Dim hasWeirdMixedCase As Boolean
     Dim hasUpper As Boolean
     Dim hasLower As Boolean
+    Dim firstChar As String
     
     For i = 0 To UBound(tokens)
         token = tokens(i)
@@ -255,7 +256,6 @@ Private Function IsGarbledText(ByVal text As String) As Boolean
             If hasSpecial Then specialCharCount = specialCharCount + 1
             
             If hasUpper And hasLower Then
-                Dim firstChar As String
                 firstChar = Left(token, 1)
                 If firstChar >= "a" And firstChar <= "z" Then
                     hasWeirdMixedCase = True
