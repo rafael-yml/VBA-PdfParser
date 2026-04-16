@@ -198,8 +198,8 @@ Private Function IsGarbledText(ByVal text As String) As Boolean
     
     Dim cleaned As String
     cleaned = Replace(text, Chr(160), " ")
-	cleaned = Replace(cleaned, vbCrLf, " ")
-	cleaned = Replace(cleaned, vbLf, " ")
+    cleaned = Replace(cleaned, vbCrLf, " ")
+    cleaned = Replace(cleaned, vbLf, " ")
     cleaned = Replace(cleaned, vbTab, " ")
     Do While InStr(cleaned, "  ") > 0
         cleaned = Replace(cleaned, "  ", " ")
@@ -212,33 +212,66 @@ Private Function IsGarbledText(ByVal text As String) As Boolean
     
     Dim singleCharCount As Long
     Dim specialCharCount As Long
+    Dim encodingIssueCount As Long
     Dim i As Long
     Dim token As String
     Dim j As Long
     Dim ch As String
     Dim hasSpecial As Boolean
+    Dim hasRepeated As Boolean
+    Dim hasWeirdMixedCase As Boolean
+    Dim hasUpper As Boolean
+    Dim hasLower As Boolean
     
     For i = 0 To UBound(tokens)
         token = tokens(i)
+        
         If Len(token) = 1 Then
             singleCharCount = singleCharCount + 1
         ElseIf Len(token) > 0 Then
             hasSpecial = False
+            hasRepeated = False
+            hasWeirdMixedCase = False
+            hasUpper = False
+            hasLower = False
+            
             For j = 1 To Len(token)
                 ch = Mid(token, j, 1)
+                
                 If Not ((ch >= "A" And ch <= "Z") Or (ch >= "a" And ch <= "z") Or (ch >= "0" And ch <= "9") Or ch = "," Or ch = "." Or ch = "-") Then
                     hasSpecial = True
-                    Exit For
                 End If
+                
+                If j >= 3 Then
+                    If Mid(token, j, 1) = Mid(token, j-1, 1) And Mid(token, j-1, 1) = Mid(token, j-2, 1) Then
+                        hasRepeated = True
+                    End If
+                End If
+                
+                If ch >= "A" And ch <= "Z" Then hasUpper = True
+                If ch >= "a" And ch <= "z" Then hasLower = True
             Next
+            
             If hasSpecial Then specialCharCount = specialCharCount + 1
+            
+            If hasUpper And hasLower Then
+                Dim firstChar As String
+                firstChar = Left(token, 1)
+                If firstChar >= "a" And firstChar <= "z" Then
+                    hasWeirdMixedCase = True
+                End If
+            End If
+            
+            If hasRepeated Or hasWeirdMixedCase Then
+                encodingIssueCount = encodingIssueCount + 1
+            End If
         End If
     Next
     
     Dim totalTokens As Long
     totalTokens = UBound(tokens) + 1
     
-    If singleCharCount / totalTokens > 0.3 Or specialCharCount / totalTokens > 0.3 Then
+    If singleCharCount / totalTokens > 0.3 Or specialCharCount / totalTokens > 0.3 Or encodingIssueCount >= 3 Then
         IsGarbledText = True
     End If
 End Function
