@@ -220,9 +220,13 @@ Private Function IsGarbledText(ByVal text As String) As Boolean
     Dim hasSpecial As Boolean
     Dim hasRepeated As Boolean
     Dim hasWeirdMixedCase As Boolean
+    Dim hasInterspersed As Boolean
     Dim hasUpper As Boolean
     Dim hasLower As Boolean
     Dim firstChar As String
+    Dim transitions As Long
+    Dim prevIsDigit As Boolean
+    Dim currIsDigit As Boolean
     
     For i = 0 To UBound(tokens)
         token = tokens(i)
@@ -233,8 +237,11 @@ Private Function IsGarbledText(ByVal text As String) As Boolean
             hasSpecial = False
             hasRepeated = False
             hasWeirdMixedCase = False
+            hasInterspersed = False
             hasUpper = False
             hasLower = False
+            transitions = 0
+            prevIsDigit = False
             
             For j = 1 To Len(token)
                 ch = Mid(token, j, 1)
@@ -249,6 +256,17 @@ Private Function IsGarbledText(ByVal text As String) As Boolean
                     End If
                 End If
                 
+                If (ch >= "0" And ch <= "9") Then
+                    currIsDigit = True
+                Else
+                    currIsDigit = False
+                End If
+                
+                If j > 1 And currIsDigit <> prevIsDigit Then
+                    transitions = transitions + 1
+                End If
+                prevIsDigit = currIsDigit
+                
                 If ch >= "A" And ch <= "Z" Then hasUpper = True
                 If ch >= "a" And ch <= "z" Then hasLower = True
             Next
@@ -262,7 +280,9 @@ Private Function IsGarbledText(ByVal text As String) As Boolean
                 End If
             End If
             
-            If hasRepeated Or hasWeirdMixedCase Then
+            If transitions >= 4 Then hasInterspersed = True
+            
+            If hasRepeated Or hasWeirdMixedCase Or hasInterspersed Then
                 encodingIssueCount = encodingIssueCount + 1
             End If
         End If
