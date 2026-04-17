@@ -280,7 +280,7 @@ Private Function IsGarbledText(ByVal text As String) As Boolean
                 End If
             End If
             
-            If transitions >= 3 Then hasInterspersed = True
+            If transitions >= 2 Then hasInterspersed = True
             
             If hasRepeated Or hasWeirdMixedCase Or hasInterspersed Then
                 encodingIssueCount = encodingIssueCount + 1
