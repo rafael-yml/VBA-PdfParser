@@ -76,6 +76,15 @@ reader.OCR.Language = "en-US"      ' set OCR language
 reader.TimeoutSeconds = 5          ' bail PdfTXT to OCR after 5 seconds
 ```
 
+### Skip straight to render + OCR
+
+```vb
+Dim pages As Collection
+Set pages = reader.TryRenderAndOCR("C:\docs\scan.pdf")   ' no PdfTXT step
+```
+
+`TryRenderAndOCR` renders the pages and runs OCR directly, retrying at lower resolutions until a page yields text. Returns a `Collection` of per-page strings (empty if OCR found nothing).
+
 ---
 
 ## Tier flow

@@ -150,7 +150,7 @@ Public Function ExtractPages( _
     Set ExtractPages = oPages
 End Function
 
-Private Function TryRenderAndOCR(ByVal filePath As String) As Collection
+Public Function TryRenderAndOCR(ByVal filePath As String) As Collection
     Set TryRenderAndOCR = New Collection
     
     Dim widths(2) As Long
