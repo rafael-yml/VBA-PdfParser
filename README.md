@@ -73,6 +73,7 @@ Next
 reader.TXT.LineTolerance = 12      ' adjust text positioning
 reader.WRT.DefaultWidth = 3508     ' render at A4 300dpi
 reader.OCR.Language = "en-US"      ' set OCR language
+reader.TimeoutSeconds = 5          ' bail PdfTXT to OCR after 5 seconds
 ```
 
 ---
@@ -120,7 +121,11 @@ Which extraction tier succeeded. Values: `"PdfTXT"`, `"OCR"`, `"WdCOM"`, or `""`
 
 #### `LastStatus` → `Long`
 
-Status code from PdfTXT. See PdfTXT constants: `PDFTXT_OK` (0), `PDFTXT_NO_TEXT` (1), `PDFTXT_NO_CMAP` (2), `PDFTXT_GARBLED` (3), `PDFTXT_FAIL` (4).
+Status code from PdfTXT. See PdfTXT constants: `PDFTXT_OK` (0), `PDFTXT_NO_TEXT` (1), `PDFTXT_NO_CMAP` (2), `PDFTXT_GARBLED` (3), `PDFTXT_FAIL` (4), `PDFTXT_TIMEOUT` (5).
+
+#### `TimeoutSeconds` → `Long`
+
+Extraction deadline in seconds for the PdfTXT tier, passed through to `PdfTXT.TimeoutSeconds` (default `15`, `0` = disabled, clamped to `43200`). When it fires, `LastStatus` becomes `PDFTXT_TIMEOUT` and the pipeline falls through to OCR.
 
 #### `TXT` → `PdfTXT`
 

@@ -24,6 +24,7 @@ Private Const PDFTXT_NO_TEXT As Long = 1  ' no text operators found (image-only 
 Private Const PDFTXT_NO_CMAP As Long = 2  ' hex-encoded glyphs found but no ToUnicode CMap
 Private Const PDFTXT_GARBLED As Long = 3  ' CMap present but unmapped-glyph ratio too high
 Private Const PDFTXT_FAIL    As Long = 4  ' file missing, not a PDF, encrypted, or parse error
+Private Const PDFTXT_TIMEOUT As Long = 5  ' extraction deadline exceeded, aborted (bail to next tier)
 
 Private Const WDCOM_OK           As Long = 0
 Private Const WDCOM_FILE_MISSING As Long = 1
@@ -46,6 +47,9 @@ Public Property Get TXT() As PdfTXT: Set TXT = m_txt: End Property
 Public Property Get WRT() As PdfWRT: Set WRT = m_wrt: End Property
 Public Property Get OCR() As WinOCR: Set OCR = m_ocr: End Property
 Public Property Get WRD() As WdCOM:  Set WRD = m_wrd: End Property
+
+Public Property Get TimeoutSeconds() As Long: TimeoutSeconds = m_txt.TimeoutSeconds: End Property
+Public Property Let TimeoutSeconds(ByVal lSec As Long): m_txt.TimeoutSeconds = lSec: End Property
 
 Private Sub Class_Initialize()
     Set m_txt = New PdfTXT
